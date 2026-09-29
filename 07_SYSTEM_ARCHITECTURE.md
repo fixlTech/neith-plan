@@ -1,18 +1,18 @@
-# System architecture
+# Neith — System Architecture
 
-Status: Candidate boundaries, no stack selected
+**Status:** Logical architecture proposal; technology and deployment choices open
 
-## Logical layers
-Clients and editor shell → application/API layer → shared creative core and specialized engines → platform services (assets, collaboration, workflow, render) → data/storage/event infrastructure → enterprise controls.
+## Layers and responsibilities
+Clients provide shell and editing controls; an API/application layer authenticates and orchestrates requests; Creative Core owns document representation, commands, versions, and references; specialized engines interpret image, design, video, motion, and audio operations; platform services manage assets, templates/brand, collaboration, review, workflow, render, and delivery; enterprise services govern policy, audit, and operations. Infrastructure supplies storage, queueing, realtime transport, search, observability, and compute.
 
-## Proposed invariant
-Human editing and automation should operate on compatible versioned composition data and use the same validation and render semantics. Service splitting and deployment topology are open decisions.
+## Invariants to decide and preserve
+A saved version identifies schema, content, asset versions, author, and time. An output identifies the exact document/template/brand/preset versions that produced it. Human and automation operations pass through compatible authorization and validation. Source media is not overwritten by an edit. Every asynchronous command can be correlated with its resulting state and errors.
 
-## Key contracts to design
-Document schema/versioning; command and undo semantics; asset references; real-time synchronization; render snapshot; authorization context; event envelope; audit provenance.
+## Main data flows
+Editor command → authorization → document mutation/version → event → collaboration notification. Asset upload → validation/transcode/metadata → stable asset reference → composition. Review request → snapshot → comments/approval → render eligibility. Workflow trigger → idempotent run → binding and validation → approval gate → render queue → artifact → destination → audit.
 
-## Failure boundaries
-Specify offline behavior, concurrency conflicts, queue backlog, job replay, regional outage, and incompatible document migrations. Quantify scale only after workload evidence.
+## Consistency and failure design
+Choose concurrency semantics for document edits (single-writer, operational transform, or CRDT where justified), define version conflict and offline recovery, and distinguish synchronous acceptance from eventual media processing. Use transactional outbox or equivalent for durable state/event agreement. Render from immutable snapshots; consumers deduplicate messages. Document retry, cancellation, timeout, dead-letter, and restoration paths.
 
-## Architecture approval
-Record selected technology and tradeoffs in `15_ARCHITECTURE_DECISIONS.md`; map ownership in `08_SERVICE_BOUNDARIES.md`.
+## Review gates
+Approve document schema/versioning, asset lineage, service boundaries, API/event contracts, security model, availability targets, and cost/workload assumptions in ADRs. A diagram alone is insufficient; prove one vertical creation-to-export and one approval/retry flow.
