@@ -1,14 +1,20 @@
-# Implementation roadmap
+# Neith — Implementation Roadmap
 
-Status: Dependency-based draft; no dates committed
+**Status:** Proposed dependency sequence; dates, staffing, and existing completion unknown
 
-| Stage | Outcome | Exit evidence |
-| --- | --- | --- |
-| 0 Discovery | Validated personas, flows, scope, constraints | Approved PRD and architecture choices |
-| 1 Foundation | Identity, tenancy, project/document/asset foundations | End-to-end save/reopen and access tests |
-| 2 Core creation | First selected editing workflows and exports | Tested creation-to-output flow |
-| 3 Team production | Sharing, review, versions, brand/templates | Multi-user acceptance tests |
-| 4 Automation | Durable workflows, render and delivery | Replay/recovery and audit tests |
-| 5 Enterprise hardening | SSO, policy, operations, scale, resilience | Security, load, recovery gates |
+| Stage | Objective | Dependencies | Exit evidence |
+| --- | --- | --- | --- |
+| R0 Discover/audit | Validate personas, first workflow, and existing code | Source access and stakeholders | Approved scope; evidence ledger |
+| R1 Foundation | Identity/tenancy, project, asset, document/version contracts | ADR-001/006 and threat model | Save/reopen with authorization and recovery |
+| R2 First production slice | Selected editing surface, preview, export | R1, render contract | End-to-end user task and golden output tests |
+| R3 Team workflow | Sharing, comments, review, templates/brand | Stable versions and permissions | Version-specific approval and revision tests |
+| R4 Automated production | Durable campaign, render variants, delivery | R2/R3 and idempotent contracts | Failure/retry/approval/audit exercise |
+| R5 Enterprise hardening | Policy/SSO as scoped, operations, resilience | Workload and customer requirements | Security, accessibility, load, restore gates |
 
-Sequence and scope must be reconciled with the existing code audit. No claim is made that stages are unbuilt.
+These are logical dependencies, not a statement that all modules are unbuilt or that enterprise capabilities should wait wholesale until R5. Reconcile actual implementation first; move a completed slice to verified status only with evidence.
+
+## Stage planning
+For each stage define release outcome, included PRD IDs, owner, capacity, dependencies, demo scenario, measurable NFRs, risk, and exit criteria. Prioritize vertical user flows over isolated service construction. Keep migration and compatibility tasks alongside feature work.
+
+## Change control
+A stage changes when accepted requirements or evidence changes. Update PRD, module inventory, ADRs, tickets, tests, and this roadmap in one review. Estimates and dates belong in a staffed release plan, not invented here.
