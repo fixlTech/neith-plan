@@ -1,17 +1,25 @@
-# Non-functional requirements
+# Neith — Non-Functional Requirements
 
-Status: Targets pending workload and customer validation
+**Status:** Metric catalogue; numerical targets pending measured workload and product scope
 
-| Quality | Metric to agree | Evidence method |
+Every target must specify cohort/device, project size, percentile, measurement window, owner, and release gate. Avoid a single latency number for a tiny design and a long 4K video.
+
+| Quality | Proposed measurement | Acceptance method |
 | --- | --- | --- |
-| Availability | Monthly service and editor availability | Synthetic checks and SLO reports |
-| Latency | p95 load/edit/save/preview times by project size | Real-user and load tests |
-| Scale | Concurrent editors, assets, job throughput | Capacity tests |
-| Durability | Acceptable data-loss window | Backup and fault tests |
-| Recovery | Recovery time by failure class | Disaster drills |
-| Security | Tenant isolation and incident response times | Threat tests and exercises |
-| Accessibility | Target standard and supported workflows | Manual and automated audit |
-| Compatibility | Supported formats, browsers, devices | Matrix tests |
-| Observability | Trace coverage and alert response | Operational review |
+| Performance | p50/p95 navigation, editor ready, command acknowledgement, save, preview, export queue time | Real-user monitoring and representative load tests |
+| Availability | Monthly successful API/editor access by tier; render queue availability separately | SLO report and synthetic transactions |
+| Scale | Concurrent editors, per-document collaborators, asset volume, queued renders, throughput | Capacity/soak tests with declared media mix |
+| Reliability | Lost edits, job completion, duplicate delivery, retry recovery rates | Fault injection and production metrics |
+| Durability | Maximum data loss for versions/assets and backup retention | Restore and checksum tests |
+| Recovery | RTO/RPO by outage class; queue replay time | Timed regional/service drills |
+| Security | Tenant-isolation failures, critical remediation time, key rotation | Penetration, authorization, and response exercises |
+| Accessibility | Chosen WCAG target and task coverage across editors | Manual assistive-technology and automated audits |
+| Compatibility | Browser/device/format/version matrix and import/export fidelity | Golden media fixtures and matrix runs |
+| Maintainability | Change failure rate, migration duration, contract compatibility | CI and release telemetry |
+| Observability | Traced critical flow coverage and actionable alert precision | Incident review and trace sampling |
 
-Assign numeric thresholds, priority tier, measurement window, and owner before these become release gates.
+## Workload profiles to define
+Simple image/design; multilayer composition; long video with audio; collaborative session; bulk template campaign; render surge. Measure CPU/GPU, memory, storage, network, and cost. Set numeric thresholds only with target hardware and user research.
+
+## Release policy
+For each accepted target document threshold, test dataset, owner, monitoring query, and exception process. A feature cannot claim enterprise readiness solely because a dashboard exists.
