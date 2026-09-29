@@ -1,15 +1,18 @@
-# Data architecture
+# Neith — Data Architecture
 
-Status: Conceptual model
+**Status:** Conceptual model; physical schema and stores undecided
 
-## Candidate entities
-Organization, User, Membership, Space, Project, Document, DocumentVersion, Command, Asset, AssetVariant, Template, BrandKit, Comment, Approval, WorkflowRun, RenderJob, Deliverable, AuditRecord.
+## Core entities and relationships
+Organization has memberships and spaces; Space has projects and policies; Project has documents; Document has immutable versions and command lineage; Version references assets and presets. Asset has immutable original, derived variants, metadata, checksum, rights, and lifecycle. Template and BrandKit have published versions. ReviewRequest targets one document version and gathers comments/decisions. WorkflowRun has steps, idempotency key, approvals, jobs, and delivery attempts. AuditRecord references actors, correlation, outcomes, and before/after versions.
 
-## Ownership and references
-Each aggregate has one write owner. Reference other domains by stable IDs and immutable version IDs where reproducibility matters. Store large media in object storage; define checksums and lineage; maintain explicit retention and deletion policies.
+## Ownership and storage
+Domain owners in `08_SERVICE_BOUNDARIES.md` control writes. Binary media belongs in object storage with stable IDs/checksums and controlled URLs; metadata and policy use transactional records; search indexes are derived; caches are disposable. Select specific databases only after access patterns, scale, and failure needs are established.
 
-## Open technical choices
-Document representation and schema evolution; relational/event data split; indexing strategy; collaborative operation model; version snapshots; geographic residency; backup and restoration; data export; legal hold.
+## Versioning and lifecycle
+Never mutate a published version or original asset in place. Define draft/autosave versus committed version, retention and garbage collection of unused media, legal hold, export/delete requests, and restore. Document schema changes need forward/backward compatibility rules, migration tests, and a fallback for clients opening newer versions.
 
-## Design outputs
-Entity relationship model, schema definitions, migrations, lifecycle diagrams, data classification, and recovery tests. Avoid choosing a database solely from this entity list.
+## Data protection
+Classify personal data, customer media, secrets, and audit records. Define encryption, tenancy partitioning, geographic residency, signed media access, key rotation, backup schedule, recovery point/time, retention, and deletion propagation to replicas and derived artifacts.
+
+## Design deliverables
+ERD with cardinalities; write-owner map; schema/migration definitions; storage and indexing selection; data lifecycle diagram; representative queries; backup restore exercise; reconciliation for orphaned assets and stuck jobs. Link accepted choices in ADRs.
