@@ -1,14 +1,18 @@
-# Release and environment plan
+# Neith — Release and Environment Plan
 
-Status: Draft operations policy
+**Status:** Proposed operational process; deployment and launch dates unapproved
 
-## Promotion
-Development → integration → staging → production. Define which checks are mandatory at each gate, who approves production rollout, and how customer data is protected.
+## Environment chain
+Local → integration/test → staging/preproduction → production. Define isolation, data policy, secrets, test accounts, media fixtures, and access per environment. Promote immutable build artifacts and compatible schema changes; avoid rebuilding different binaries for production.
 
-## Release controls
-Versioned artifacts and schemas; feature flags; backward-compatible migrations; progressive rollout; monitored health checks; rollback and forward-fix plans; release notes and incident playbook.
+## Release sequence
+Approve scope and readiness → run CI/security/accessibility gates → deploy database/event compatibility changes → deploy behind flags → smoke test and canary → observe SLO and business telemetry → expand rollout → publish release notes and support guidance. Keep old/new clients compatible for an agreed window.
 
-## Go-live gate
-Approved scope and acceptance evidence; security and accessibility sign-off; capacity and recovery validation; support ownership; observability; backup restoration; customer communication plan.
+## Rollback and migration
+Define rollback for application, feature flag, database, document schema, queue consumers, and media artifacts. Prefer expand/contract migrations and reversible steps. Irreversible transformations require backups, rehearsal, and explicit forward-repair plan. On job failures, stop new side effects and reconcile in-flight delivery before replay.
 
-No date, uptime claim, or deployment environment is committed by this plan.
+## Go-live checklist
+Approved PRD/ADR scope, end-to-end acceptance, tenant and security tests, accessibility, load and cost envelope, backup restore, monitored alerts, on-call and incident procedure, customer support, data retention/privacy, and release owner sign-off. Record evidence and exceptions rather than merely checking boxes.
+
+## Versioning
+Version public APIs and events by compatibility policy; version documents and templates explicitly; identify every render artifact by source versions and build/preset. Maintain a release note and deprecation schedule for clients and integrations.
